@@ -41,9 +41,7 @@ export const AuthProvider = ({ children }) => {
 
       const user = await response.json();
       setUserInfo(user);
-    } catch (error) {
-      // Add your own error handler here
-    }
+    } catch (error) {}
   };
 
   return (
