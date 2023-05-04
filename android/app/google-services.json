@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "611347768149",
+    "project_id": "wyaapple-96e3d",
+    "storage_bucket": "wyaapple-96e3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611347768149:android:6ed1620c43649e283b05dc",
+        "android_client_info": {
+          "package_name": "com.sophiasandoval.wya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611347768149-7al7i399vpkvpi4frpplq1qln7bkp2k2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCR0xGmeWSWKBWFEJ3qflsEUSGmtgsXJhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611347768149-7al7i399vpkvpi4frpplq1qln7bkp2k2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "611347768149-8gt95e7tanp75vdbq867drohuf74k40d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sophiasandoval.wya"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

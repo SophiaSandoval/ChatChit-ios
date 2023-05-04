@@ -26,7 +26,13 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>wya</string>
-          <string>com.wya.wya</string>
+          <string>com.sophiasandoval.wya</string>
+        </array>
+      </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.611347768149-8gt95e7tanp75vdbq867drohuf74k40d</string>
         </array>
       </dict>
       <dict>

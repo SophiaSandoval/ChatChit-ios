@@ -1,4 +1,4 @@
-package com.wya;
+package com.sophiasandoval.wya;
 
 import android.os.Build;
 import android.os.Bundle;

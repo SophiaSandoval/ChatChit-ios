@@ -1,4 +1,4 @@
-package com.wya;
+package com.sophiasandoval.wya;
 
 import android.app.Application;
 import android.content.res.Configuration;
