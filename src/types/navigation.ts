@@ -1,13 +1,48 @@
 import type { RouteProp } from "@react-navigation/native";
 
 export type MainStackParamList = {
-  LoginScreen: undefined;
   HomeScreen: undefined;
-  ChatScreen: { title: string };
+  UserInfoScreen: undefined;
+  CreateProfileScreen: undefined;
+  LoginScreen: undefined;
+  RegisterScreen: undefined;
+  LoginPromptScreen: undefined;
+  EditProfileScreen: undefined;
+  SearchScreen: undefined;
+  Chat: any;
 };
 
-export type ChatScreenRouteProp = RouteProp<MainStackParamList, "ChatScreen">;
+export type ChatRouteProp = RouteProp<MainStackParamList, "Chat">;
+
+export type SearchScreenRouteProp = RouteProp<
+  MainStackParamList,
+  "SearchScreen"
+>;
+
+export type UserInfoScreenRouteProp = RouteProp<
+  MainStackParamList,
+  "UserInfoScreen"
+>;
 
 export type HomeScreenRouteProp = RouteProp<MainStackParamList, "HomeScreen">;
 
 export type LoginScreenRouteProp = RouteProp<MainStackParamList, "LoginScreen">;
+
+export type CreateProfileScreenProp = RouteProp<
+  MainStackParamList,
+  "CreateProfileScreen"
+>;
+export type LoginPromptScreenRouteProp = RouteProp<
+  MainStackParamList,
+  "LoginPromptScreen"
+>;
+
+export type RegisterScreenRouteProp = RouteProp<
+  MainStackParamList,
+  "RegisterScreen"
+>;
+
+export type EditProfileScreenRouteProp = RouteProp<
+  MainStackParamList,
+  "EditProfileScreen"
+>;

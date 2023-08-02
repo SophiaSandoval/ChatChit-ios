@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>611347768149-8gt95e7tanp75vdbq867drohuf74k40d.apps.googleusercontent.com</string>
+	<string>829459939386-s10osko9kdeprf0v6uc5mg9jg769qnlk.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.611347768149-8gt95e7tanp75vdbq867drohuf74k40d</string>
+	<string>com.googleusercontent.apps.829459939386-s10osko9kdeprf0v6uc5mg9jg769qnlk</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDeTLevsqNw9NrCB5KQ0yM0T_N2xQ54idE</string>
+	<string>AIzaSyC2Sl5Um0YGXif5Xk0pDYjj26LoBvslmN4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>611347768149</string>
+	<string>829459939386</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.sophiasandoval.wya</string>
 	<key>PROJECT_ID</key>
-	<string>wyaapple-96e3d</string>
+	<string>coyotecarpool-ios</string>
 	<key>STORAGE_BUCKET</key>
-	<string>wyaapple-96e3d.appspot.com</string>
+	<string>coyotecarpool-ios.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:611347768149:ios:154bf9724c57d1a03b05dc</string>
+	<string>1:829459939386:ios:62787adc766c823fd5f503</string>
 </dict>
 </plist>

@@ -29,13 +29,18 @@
       "package": "com.sophiasandoval.wya"
     },
     "plugins": [
-      "@react-native-firebase/app",
       [
         "expo-build-properties",
         {
           "ios": {
             "useFrameworks": "static"
           }
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photoPermission": "The app accesses your photos to let you share them with your friends"
         }
       ]
     ],
