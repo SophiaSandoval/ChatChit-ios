@@ -22,7 +22,8 @@ I started working on ChitChat in August but took a break to develop a website fo
 5. **Profile Reading:** Users can view their own profile.
 
 6. **Profile Updating:** Users have the ability to update their profiles, including changing their profile picture or updating their information.
-7. 7. **Profile Search** Users can search for other users who they want to chat with.
+7. **Profile Search** Users can search for other users who they want to chat with.
+      
 **Future Plans:**
 
 **I'm actively working on enhancing ChitChat with the following features**
@@ -43,7 +44,9 @@ I started working on ChitChat in August but took a break to develop a website fo
 
 The primary audience for this project, particularly this README update, is recruiters from potential job opportunities. I believe ChitChat showcases my skills in mobile app development, and I'm excited about the opportunity to further refine and expand this project.
 
-Thank you for taking the time to review my project, and please feel free to reach out if you have any questions or would like to discuss it further.
+Thank you for taking the time to review my project, and please feel free to reach out if you have any questions or would like to discuss it further. My phone number is (909)838-1286 and my email is sandovalm.sophia@gmail.com.
+
+-Sophia
 
 https://github.com/SophiaSandoval/ChatChit-ios/assets/89662198/f3c8689e-2b72-4189-8fe6-94bdfa134be3
 
