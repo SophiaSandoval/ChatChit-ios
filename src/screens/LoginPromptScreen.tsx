@@ -12,6 +12,8 @@ import * as Yup from "yup";
 import { useAuth } from "../Context/authContext";
 import { Formik } from "formik";
 import CustomButton from "../components/CustomButton";
+import styles from "../styles/styles";
+import { LinearGradient } from "expo-linear-gradient";
 
 type LoginPromptScreenProps = NativeStackScreenProps<
   MainStackParamList,
@@ -52,99 +54,100 @@ const LoginPromptScreen: React.FC<LoginPromptScreenProps> = (props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
-        onSubmit={handleSubmit}
-        validationSchema={SignInSchema}
-      >
-        {({ handleChange, handleSubmit, values, errors }) => (
-          <View style={styles.loginContainer}>
-            <Text style={styles.text}>Email address</Text>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={handleChange("email")}
-              value={values.email}
-            />
-            {errors.email && <Text>{errors.email}</Text>}
+    <LinearGradient
+      // Background Linear Gradient
+      colors={["blue", "pink", "purple"]}
+      style={styles.linearGradient}
+    >
+      <View style={styles.loginContainer}>
+        <Formik
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          onSubmit={handleSubmit}
+          validationSchema={SignInSchema}
+        >
+          {({ handleChange, handleSubmit, values, errors }) => (
+            <View style={styles.signinContainer}>
+              <Text style={styles.blackText}>Email address</Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={handleChange("email")}
+                value={values.email}
+              />
+              {errors.email && <Text>{errors.email}</Text>}
 
-            <Text style={styles.text}>Password</Text>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={handleChange("password")}
-              value={values.password}
-            />
-            {errors.password && <Text>{errors.password}</Text>}
+              <Text style={styles.blackText}>Password</Text>
+              <TextInput
+                style={styles.textInput}
+                onChangeText={handleChange("password")}
+                value={values.password}
+              />
+              {errors.password && <Text>{errors.password}</Text>}
 
-            <TouchableOpacity
-              style={styles.button}
-              onPress={async () => {
-                handleSubmit();
-              }}
-            >
-              <Text style={styles.buttonText}>Sign In</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => props.navigation.push("RegisterScreen")}
-            >
-              <Text>Dont have an account? Register</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </Formik>
-    </View>
+              <TouchableOpacity
+                onPress={async () => {
+                  handleSubmit();
+                }}
+              >
+                <LinearGradient
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  colors={["#5CA0f2", "#F5f7f6"]}
+                  style={styles.linearButton}
+                >
+                  <Text style={styles.buttonText}>Sign In</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+          )}
+        </Formik>
+      </View>
+    </LinearGradient>
   );
 };
 
 export default LoginPromptScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "#213B62",
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-  },
-  loginContainer: {
-    width: "90%",
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: 30,
-    elevation: 10,
-  },
-  textInput: {
-    height: 50,
-    width: "100%",
-    margin: 10,
-    backgroundColor: "white",
-    borderColor: "gray",
-    borderWidth: StyleSheet.hairlineWidth,
-    borderRadius: 10,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  text: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "black",
-    //width: '100%',
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     width: "100%",
+//     height: "100%",
+//     backgroundColor: "#213B62",
+//     alignItems: "center",
+//     flex: 1,
+//     justifyContent: "center",
+//   },
+
+//   textInput: {
+//     height: 50,
+//     width: "100%",
+//     margin: 10,
+//     backgroundColor: "white",
+//     borderColor: "gray",
+//     borderWidth: StyleSheet.hairlineWidth,
+//     borderRadius: 10,
+//   },
+//   button: {
+//     backgroundColor: "#0782F9",
+//     width: "100%",
+//     padding: 15,
+//     borderRadius: 10,
+//     marginVertical: 10,
+//   },
+//   buttonText: {
+//     color: "white",
+//     fontWeight: "700",
+//     fontSize: 16,
+//     textAlign: "center",
+//   },
+//   text: {
+//     fontSize: 20,
+//     fontWeight: "700",
+//     color: "black",
+//     //width: '100%',
+//     justifyContent: "center",
+//     alignItems: "center",
+//   },
+// });

@@ -6,9 +6,12 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import styles from "../styles/styles";
 import React from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MainStackParamList } from "../types/navigation";
+import { LinearGradient } from "expo-linear-gradient";
+import logo from "../assets/ChatChit.png";
 
 type LoginScreenProps = NativeStackScreenProps<
   MainStackParamList,
@@ -17,76 +20,51 @@ type LoginScreenProps = NativeStackScreenProps<
 
 const LoginScreen: React.FC<LoginScreenProps> = (props) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Chit Chat</Text>
-      <View style={styles.inputContainer}>
-        <TouchableOpacity
-          onPress={() => props.navigation.push("LoginPromptScreen")}
-          style={styles.button}
-        >
-          <Text style={styles.buttonText}>Login </Text>
-        </TouchableOpacity>
+    <LinearGradient
+      // Background Linear Gradient
+      colors={["blue", "pink", "purple"]}
+      style={styles.linearGradient}
+    >
+      <View style={styles.logoContainer}>
+        <Image source={logo} style={styles.logo} />
       </View>
-      <Text style={styles.text}> -OR- </Text>
-      <View style={styles.inputContainer}>
-        {/* Touchable Opacity is a wrapper for making the Google Login
+      <View style={styles.container}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => props.navigation.push("LoginPromptScreen")}
+            // style={styles.button}
+          >
+            <LinearGradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              colors={["#5CA0f2", "#F5f7f6"]}
+              style={styles.linearButton}
+            >
+              <Text style={styles.buttonText}>Login </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.text}> -OR- </Text>
+        <View style={styles.buttonContainer}>
+          {/* Touchable Opacity is a wrapper for making the Google Login
         feature button respond properly to touches */}
-        <TouchableOpacity
-          onPress={() => props.navigation.push("RegisterScreen")}
-          style={styles.button}
-        >
-          {/*Display "Sign Up With Google button" */}
-          <Text style={styles.buttonText}>Sign Up </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => props.navigation.push("RegisterScreen")}
+          >
+            <LinearGradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              colors={["#5CA0f2", "#F5f7f6"]}
+              style={styles.linearButton}
+            >
+              {/*Display "Sign Up With Google button" */}
+              <Text style={styles.buttonText}>Sign Up </Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
-
-const styles = StyleSheet.create({
-  //background color and alignment
-  container: {
-    backgroundColor: "#213B62",
-    width: "100%",
-    height: "100%",
-    padding: 50,
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 30,
-    fontWeight: "700",
-    color: "#FFF",
-  },
-  logo: {
-    width: "100%",
-    maxWidth: 300,
-    height: 300,
-  },
-  inputContainer: {
-    width: "100%",
-    marginTop: 5,
-  },
-  button: {
-    backgroundColor: "#0782F9",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  text: {
-    fontSize: 25,
-    fontWeight: "700",
-    color: "#0782F9",
-    //width: '100%',
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default LoginScreen;

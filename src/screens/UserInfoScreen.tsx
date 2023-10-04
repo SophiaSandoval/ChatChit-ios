@@ -1,40 +1,28 @@
-import {
-  ActivityIndicator,
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TextInput, Alert } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MainStackParamList } from "../types/navigation";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import CustomButton from "../components/CustomButton";
-import {
-  DocumentData,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
-import { auth, db } from "../../firebase/config";
+
+import { auth, db, userRef } from "../../firebase/config";
 import { AuthContext, useAuth } from "../Context/authContext";
-import { Ionicons } from "@expo/vector-icons";
-import { Auth } from "@firebase/auth";
-import { signOut } from "@firebase/auth";
+
+import { useFirebase, UserDetailsContextState } from "../Context/userContext";
+import { Feather } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
+
 import {
-  ref,
-  getStorage,
-  uploadBytes,
   getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
   uploadBytesResumable,
 } from "firebase/storage";
-import { SimpleLineIcons } from "@expo/vector-icons";
-import firebase from "firebase/compat";
+import * as ImagePicker from "expo-image-picker";
+import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { LinearGradient } from "expo-linear-gradient";
+import styles from "../styles/styles";
 export let usertemp = [];
 
 type UserInfoScreenProps = NativeStackScreenProps<
@@ -43,38 +31,78 @@ type UserInfoScreenProps = NativeStackScreenProps<
 >;
 
 const UserInfoScreen: React.FC<UserInfoScreenProps> = (props) => {
-  const { user } = useContext(AuthContext);
-  const userkey = auth.currentUser.uid;
-  const [userdetails, setUserDetails] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [userImageUrl, setUserImageUrl] = useState(null);
+  const { userDetails, updateUserDetails } = useFirebase(); // Get the addUserDetails function from the FirebaseProvider
   const { logOut } = useAuth();
+  const storage = getStorage();
+  const uid = auth.currentUser.uid;
+  const [isLoading, setIsLoading] = useState(false);
+  const [editedUsername, setEditedUsername] = useState<string>("");
+  const [editedemail, setEditedEmail] = useState<string>("");
+  const [editedBio, setEditedBio] = useState<string>("");
+  const [editedUserImageUrl, setEditedUserImageUrl] = useState<string>("");
+  const { user, setUserAvatarUrl, userAvatarUrl } = useContext(AuthContext);
+  const [editMode, setEditMode] = useState(false);
+  const [inputValue, setInputValue] = useState<string>("");
 
-  async function DocFinder(queryResult) {
-    const querySnapshot = await getDocs(queryResult);
+  // Step 2: Render Text or TextInput based on edit mode
 
-    querySnapshot.forEach((doc) => {
-      let userdetails = [];
-      userdetails.push({
-        ...(doc.data() as Record<string, unknown>),
-        id: doc.id,
-      });
-      console.log("DATA IS EQUAL TO", userdetails);
-      setUserDetails(userdetails);
-    });
-  }
-  console.log(userdetails);
-  useEffect(() => {
-    if (!user) return;
-    const userRef = collection(db, "user");
-    console.log("User Document Reference:", userRef.path); // Log the document reference path to verify if it's correct
+  console.log("userdetails in UserInfoScreen ; ", userDetails);
+  const renderTextOrInput = (
+    value: string,
+    setValue: React.Dispatch<React.SetStateAction<string>>,
+    field: string // Add a new parameter to indicate the field to edit
+  ) => {
+    if (editMode) {
+      // Render TextInput in edit mode
+      return (
+        <TextInput
+          style={styles.inputContainer}
+          placeholder={value}
+          placeholderTextColor={"black"}
+          value={
+            field === "Name"
+              ? editedUsername
+              : field === "Email"
+              ? editedemail
+              : editedBio
+          }
+          onChangeText={(text) => {
+            if (field === "Name") {
+              setEditedUsername(text);
+            } else if (field === "Email") {
+              setEditedEmail(text);
+            } else if (field === "Bio") {
+              setEditedBio(text);
+            }
+          }}
+          editable={true}
+        />
+      );
+    } else {
+      // Render Text in view mode
+      return <Text style={styles.text}>{value}</Text>;
+    }
+  };
 
-    const queryResult = query(userRef, where("uid", "==", userkey));
-    DocFinder(queryResult);
-  }, []);
+  // Step 3: Handle edit button click
+  const handleEditClick = () => {
+    setEditMode(!editMode); // Toggle edit mode on/off
+  };
 
-  usertemp = Object.assign([], userdetails);
-  console.log(usertemp);
+  const handleUpdate = async () => {
+    const updatedUserDetails: UserDetailsContextState = {
+      ...userDetails,
+      uid: uid,
+      username: editedUsername,
+      email: editedemail,
+      bio: editedBio,
+      userImageUrl: editedUserImageUrl,
+    };
+
+    await updateUserDetails(updatedUserDetails);
+    setEditMode(false);
+  };
+
   const handleSignOut = async () => {
     try {
       await logOut(auth).then(() => {
@@ -85,132 +113,163 @@ const UserInfoScreen: React.FC<UserInfoScreenProps> = (props) => {
       console.log("Sign out error ", error);
     }
   };
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 0.2,
+    });
 
-  // const Logout = async () => {
-  //   auth
-  //     .signOut()
-  //     .then(() => {
-  //       console.log("User Signed Out Successfully!");
-  //     })
-  //     .catch((e) => Alert.alert("Error", e.message));
-  //   // setUser(null);
-  // };
+    // console.log(result);
+
+    if (!result.canceled) {
+      setUserAvatarUrl(result.assets[0].uri);
+      uploadImage(result.assets[0].uri);
+    }
+  };
+  const uploadImage = async (image) => {
+    const res = await fetch(image);
+    console.log("response = ", JSON.stringify(res));
+    const blob = await res.blob();
+    console.log("blob = ", JSON.stringify(blob));
+    const filename = image.substring(image.lastIndexOf("/"));
+    console.log("filename = ", filename);
+    const imageRef = ref(storage, `ProfilePicture/${filename}`);
+    uploadBytesResumable(imageRef, blob).then(async () => {
+      const downloadURL = await getDownloadURL(imageRef);
+      console.log(downloadURL);
+      setEditedUserImageUrl(downloadURL);
+      setUserAvatarUrl(downloadURL);
+    });
+  };
 
   return (
-    <View style={styles.homecontainer}>
-      <Text style={styles.title}>Profile Info</Text>
-      <FlatList
-        id={userdetails.id}
-        data={userdetails}
-        renderItem={({ item }) => (
-          <View>
-            <Image style={styles.logo} source={{ uri: item.profilePic }} />
+    <LinearGradient
+      colors={["blue", "pink", "purple"]}
+      style={styles.linearGradient}
+    >
+      <View style={styles.container}>
+        <Text style={styles.text}>Your Profile</Text>
+        <FlatList
+          data={userDetails}
+          keyExtractor={(item) => item.uid}
+          renderItem={({ item }) => (
             <View>
-              <View style={styles.row}>
-                <Text style={styles.text}>Name: {item.username}</Text>
-              </View>
-              <View style={styles.row}>
-                <Text style={styles.text}>Username: {item.email}</Text>
-              </View>
+              <Image
+                style={styles.profileImage}
+                source={{ uri: userAvatarUrl }}
+              />
+              <SimpleLineIcons
+                style={styles.cameraIcon}
+                name="camera"
+                size={30}
+                color="white"
+                onPress={pickImage}
+              />
+              <View>
+                <View style={styles.row}>
+                  <Text style={styles.text}>Name: </Text>
+                  {renderTextOrInput(item.username, setEditedUsername, "Name")}
+                </View>
+                <View style={styles.row}>
+                  <Text style={styles.text}>Email: </Text>
+                  {renderTextOrInput(item.email, setEditedEmail, "Email")}
+                </View>
 
-              <View style={styles.row}>
-                <Text style={styles.text}>Bio: {item.bio}</Text>
+                <View style={styles.bioRow}>
+                  <Text style={styles.text}>Bio: </Text>
+                  {renderTextOrInput(item.bio, setEditedBio, "Bio")}
+                </View>
               </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
 
-      <View style={styles.inputContainer}>
-        <CustomButton
-          text="Edit User Profile"
-          onPress={() => props.navigation.push("EditProfileScreen")}
-          bgColor={undefined}
-          fgColor={undefined}
-        />
-        {/* <CustomButton
-          text="Home"
-          onPress={null}
-          bgColor={undefined}
-          fgColor={undefined}
-        /> */}
-        <CustomButton
-          text="Sign Out"
-          onPress={handleSignOut}
-          bgColor={undefined}
-          fgColor={undefined}
-        />
+        <View style={styles.container}>
+          {editMode ? (
+            <CustomButton
+              text="Save User Profile"
+              onPress={handleUpdate}
+              bgColor={undefined}
+              fgColor={undefined}
+            />
+          ) : (
+            <Feather
+              name="edit"
+              size={24}
+              color="white"
+              onPress={handleEditClick}
+            />
+          )}
+          <CustomButton
+            text="Sign Out"
+            onPress={handleSignOut}
+            bgColor={undefined}
+            fgColor={undefined}
+          />
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
 export default UserInfoScreen;
 
-const styles = StyleSheet.create({
-  homecontainer: {
-    backgroundColor: "#FFB6C1",
-    flex: 1,
-    alignItems: "center",
-  },
-  //title format and screen placement
-  title: {
-    fontSize: 30,
-    fontWeight: "700",
-    color: "#FFF",
-  },
-  item: {
-    flexDirection: "row",
-    borderColor: "#FFF",
-    borderWidth: 3,
-    //justifyContent: 'center',
-    paddingHorizontal: 5,
-    marginVertical: 5,
-  },
-  imageList: {
-    width: 50,
-    height: 50,
-    left: 25,
-    bottom: 20,
-  },
-  text: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 18,
-    alignItems: "center",
-    paddingHorizontal: 5,
-    marginVertical: 15,
-  },
-  button: {
-    backgroundColor: "#f6f2f2",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "700",
-    fontSize: 16,
-    textAlign: "center",
-  },
-  row: {
-    borderColor: "	#f6f2f2",
-    borderWidth: 3,
-    paddingHorizontal: 5,
-    marginVertical: 5,
-  },
-  inputContainer: {
-    width: "80%",
-    marginTop: 5,
-    borderRadius: 10,
-  },
-  logo: {
-    width: "100%",
-    maxWidth: 100,
-    height: 100,
-    paddingHorizontal: 10,
-    marginVertical: 3,
-    justifyContent: "center",
-  },
-});
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     paddingHorizontal: 20,
+//     paddingTop: 30,
+//   },
+//   profileImage: {
+//     width: 100,
+//     height: 100,
+//     borderRadius: 50,
+//     alignSelf: "center",
+//     marginBottom: 20,
+//   },
+//   input: {
+//     borderBottomWidth: 1,
+//     borderColor: "#ccc",
+//     paddingVertical: 8,
+//     marginBottom: 10,
+//   },
+//   text: {
+//     fontSize: 16,
+//     marginBottom: 10,
+//   },
+//   editButton: {
+//     alignSelf: "center",
+//     padding: 10,
+//     backgroundColor: "#2196F3",
+//     borderRadius: 5,
+//     marginTop: 10,
+//   },
+//   editText: {
+//     color: "#fff",
+//     fontWeight: "bold",
+//   },
+//   signOutButton: {
+//     alignSelf: "center",
+//     padding: 10,
+//     backgroundColor: "#F44336",
+//     borderRadius: 5,
+//     marginTop: 20,
+//   },
+//   signOutText: {
+//     color: "#fff",
+//     fontWeight: "bold",
+//   },
+//   row: {
+//     flexDirection: "row",
+//     justifyContent: "space-between",
+//     alignItems: "center",
+//     borderBottomWidth: 1,
+//     borderColor: "#ccc",
+//     paddingVertical: 10,
+//     paddingHorizontal: 20,
+//     marginRight: 200,
+//   },
+// });

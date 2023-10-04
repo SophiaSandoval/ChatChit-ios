@@ -7,7 +7,6 @@ export type MainStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   LoginPromptScreen: undefined;
-  EditProfileScreen: undefined;
   SearchScreen: undefined;
   Chat: any;
 };
@@ -40,9 +39,4 @@ export type LoginPromptScreenRouteProp = RouteProp<
 export type RegisterScreenRouteProp = RouteProp<
   MainStackParamList,
   "RegisterScreen"
->;
-
-export type EditProfileScreenRouteProp = RouteProp<
-  MainStackParamList,
-  "EditProfileScreen"
 >;

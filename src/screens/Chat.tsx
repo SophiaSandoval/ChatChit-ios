@@ -13,7 +13,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native-gesture-handler";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useRoute } from "@react-navigation/native";
 import userAvatar from "../assets/man.png";
@@ -31,6 +31,8 @@ import {
 } from "firebase/firestore";
 import { chatRef, db } from "../../firebase/config";
 import MessageItem from "../components/MessageItem";
+import { LinearGradient } from "expo-linear-gradient";
+import styles from "../styles/styles";
 
 // Define the data type for route params
 interface ChatRouteParams {
@@ -70,16 +72,30 @@ const Chat: React.FC<ChatProps> = (props) => {
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerLeft: () => (
-        <View>
+        <View style={{ alignItems: "center", flexDirection: "row" }}>
           <TouchableOpacity onPress={() => props.navigation.goBack()}>
             <Ionicons name="ios-arrow-back-outline" size={24} color="black" />
           </TouchableOpacity>
           {friendAvatar !== undefined ? (
-            <Image source={{ uri: friendAvatar }} />
+            <Image
+              style={{
+                maxWidth: 35,
+                height: 35,
+              }}
+              source={{ uri: friendAvatar }}
+            />
           ) : (
-            <Image source={userAvatar} />
+            <Image
+              style={{
+                maxWidth: 30,
+                height: 30,
+              }}
+              source={userAvatar}
+            />
           )}
-          <Text>{friendName}</Text>
+          <Text style={{ fontSize: 20, fontWeight: "400", paddingLeft: 10 }}>
+            {friendName}
+          </Text>
         </View>
       ),
     });
@@ -189,58 +205,56 @@ const Chat: React.FC<ChatProps> = (props) => {
   }, [messages]);
   return (
     <View>
-      <View style={{ height: "90%" }}>
-        {messages[0] !== undefined && (
-          <FlatList
-            initialNumToRender={10}
-            ref={flatListRef}
-            onContentSizeChange={() => {
-              if (isListReady)
-                flatListRef?.current?.scrollToEnd({ animated: true });
-            }}
-            data={messages[0]}
-            keyExtractor={(item) => item.timestamp}
-            renderItem={({ item }) => (
-              <MessageItem item={item} sender={sender} />
-            )}
-          />
-        )}
+      <View style={{ height: "85%" }}>
+        <LinearGradient
+          colors={["blue", "pink", "purple"]}
+          style={styles.linearGradient}
+        >
+          {messages[0] !== undefined && (
+            <FlatList
+              initialNumToRender={10}
+              ref={flatListRef}
+              onContentSizeChange={() => {
+                if (isListReady)
+                  flatListRef?.current?.scrollToEnd({ animated: true });
+              }}
+              data={messages[0]}
+              keyExtractor={(item) => item.timestamp}
+              renderItem={({ item }) => (
+                <MessageItem item={item} sender={sender} />
+              )}
+            />
+          )}
+        </LinearGradient>
       </View>
-      <View style={{ height: "10%" }}>
-        <TextInput
-          style={styles.inputContainer}
-          placeholder="type your message here"
-          multiline={true}
-          value={message}
-          onChangeText={(text) => setMessage(text)}
-        />
-        <TouchableOpacity onPress={handleSend}>
-          <MaterialCommunityIcons
-            name="account-search-outline"
-            size={24}
-            color="black"
+
+      <View style={{ height: "15%" }}>
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          colors={["#5CA0f2", "#F5f7f6"]}
+          style={{ height: "100%", alignItems: "center", flexDirection: "row" }}
+        >
+          <TextInput
+            style={styles.chatInputContainer}
+            placeholder="type your message here"
+            placeholderTextColor={"black"}
+            multiline={true}
+            value={message}
+            onChangeText={(text) => setMessage(text)}
           />
-        </TouchableOpacity>
+          <TouchableOpacity onPress={handleSend}>
+            <Feather
+              style={{ padding: 10 }}
+              name="send"
+              size={24}
+              color="black"
+            />
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
     </View>
   );
 };
 
 export default Chat;
-
-const styles = StyleSheet.create({
-  inputContainer: {
-    backgroundColor: "white",
-    width: "90%",
-    padding: 10,
-    flex: 1,
-    alignContent: "center",
-
-    borderColor: "#e8e8e8",
-    borderWidth: 1,
-    borderRadius: 5,
-
-    paddingHorizontal: 0,
-    marginBottom: 5,
-  },
-});

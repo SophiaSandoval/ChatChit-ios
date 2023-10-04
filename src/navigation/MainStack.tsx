@@ -6,7 +6,6 @@ import UserInfoScreen from "../screens/UserInfoScreen";
 import LoginScreen from "../screens/LoginScreen";
 import CreateProfileScreen from "../screens/CreateProfileScreen";
 import LoginPromptScreen from "../screens/LoginPromptScreen";
-import EditProfileScreen from "../screens/EditProfileScreen";
 import { MainStackParamList } from "../types/navigation";
 import RegisterScreen from "../screens/RegisterScreen";
 import { AuthContext, useAuth } from "../Context/authContext";
@@ -48,7 +47,6 @@ const MainStack = () => {
           name="CreateProfileScreen"
           component={CreateProfileScreen}
         />
-        <Stack.Screen name="EditProfileScreen" component={EditProfileScreen} />
       </Stack.Navigator>
     );
   }
