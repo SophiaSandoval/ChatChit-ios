@@ -7,7 +7,7 @@ ChitChat is a cross-platform chat application that I've been developing using Re
 
 **Project Timeline:**
 
-I started working on ChitChat in August but took a break to develop a website for a plumbing company, which explains the gap in the project timeline. I have now resumed work on ChitChat and wanted to provide an update on its current status and future developments.
+I started working on ChitChat in August but took a break to develop a website for a plumbing company,arplumbinganddrain.com, which explains the gap in the project timeline. I have now resumed work on ChitChat and wanted to provide an update on its current status and future developments.
 
 **Current Features:**
 
